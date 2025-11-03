@@ -56,7 +56,40 @@ const createPlayer = function (name, playerMarker) {
 const playerOne = createPlayer(`Player One`, "0");
 const playerTwo = createPlayer(`Player Two`, "x");
 
-console.log(
-    `${playerOne.getPlayerName()} is: ${playerOne.getPlayerMarker()}
-    ${playerTwo.getPlayerName()} is: ${playerTwo.getPlayerMarker()}`
-)
+ 
+// This will be the gameLoop
+
+const gameController = function(player, row, col) {
+
+    // These variables allow to have a different values each time that the function is invoked:
+
+    const playerName = player.getPlayerName();
+    const playerMarker = player.getPlayerMarker();
+
+    // This loop checks if the board is full. Future updates will include win check and resetting 
+    // the board
+
+    let isBoardFull = false;
+    let cellCount = 0;
+ 
+    for (const row of boardSetup.getBoard()) {
+        for (const cell of row) {
+           if (cell != "[ ]") {
+                cellCount++
+            }
+        }
+    }
+
+    // Change isBoardFull state if it meets condition. This will later evolve into win check and reset
+
+    if (cellCount === 9) {
+        isBoardFull = true;
+    }
+
+    isBoardFull ? console.log("The game is done"):
+    boardSetup.updateBoard(playerName, playerMarker, row, col); 
+
+   
+
+
+}
