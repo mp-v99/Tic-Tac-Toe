@@ -8,9 +8,6 @@ const gameSetup = (function settingBoard() {
                          ["[ ]", "[ ]", "[ ]"],
                          ["[ ]", "[ ]", "[ ]"]]
 
-    const playerOne = "0"
-    const playerTwo = "x"
-
     const getBoard = () => { return matrixBoard }
 
     /* This function will receive the player's move to update the board and 
@@ -21,8 +18,6 @@ const gameSetup = (function settingBoard() {
         console.log(`${player}'s move:`)
         console.log(matrixBoard)
     }
-    const getPlayerOne = () => { return playerOne }
-    const getPlayerTwo = () => { return playerTwo }
 
     console.log(`The game is afoot. 
         Player One = 0
@@ -55,7 +50,7 @@ const playerOne = createPlayer(prompt(`Player One: `), "0");
 const playerTwo = createPlayer(prompt(`Player Two: `), "x");
 
 console.log(`
-    ${playerOne.getPlayerName()} is: ${gameSetup.getPlayerOne()}
-    ${playerTwo.getPlayerName()} is: ${gameSetup.getPlayerTwo()}
+    ${playerOne.getPlayerName()} is: ${playerOne.getPlayerMarker()}
+    ${playerTwo.getPlayerName()} is: ${playerTwo.getPlayerMarker()}
     `
 )
