@@ -3,7 +3,7 @@
 // only two players, "0" will always correspond to player one and so 
 // will "x" to player two
 
-const gameSetup = (function settingBoard() {
+const boardSetup = (function() {
     const matrixBoard = [["[ ]", "[ ]", "[ ]"],
                          ["[ ]", "[ ]", "[ ]"],
                          ["[ ]", "[ ]", "[ ]"]]
@@ -33,7 +33,7 @@ const gameSetup = (function settingBoard() {
     console.log(matrixBoard)
 
 
-    return { getBoard, updateBoard}
+    return {getBoard, updateBoard}
 })()
 
 // This is the factory function for both of the players, it relies on closure
@@ -56,8 +56,7 @@ const createPlayer = function (name, playerMarker) {
 const playerOne = createPlayer(`Player One`, "0");
 const playerTwo = createPlayer(`Player Two`, "x");
 
-console.log(`
-    ${playerOne.getPlayerName()} is: ${playerOne.getPlayerMarker()}
-    ${playerTwo.getPlayerName()} is: ${playerTwo.getPlayerMarker()}
-    `
+console.log(
+    `${playerOne.getPlayerName()} is: ${playerOne.getPlayerMarker()}
+    ${playerTwo.getPlayerName()} is: ${playerTwo.getPlayerMarker()}`
 )
