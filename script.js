@@ -7,9 +7,6 @@ const gameSetup = (function settingBoard() {
     const matrixBoard = [["[ ]", "[ ]", "[ ]"],
                          ["[ ]", "[ ]", "[ ]"],
                          ["[ ]", "[ ]", "[ ]"]]
-    // alert("Hey what's up G, give us your name!")
-    // let playerOne = prompt("Ready Player One?")
-    // let playerTwo = prompt("Ready Player Two?")
 
     let playerOne = "0";
     let playerTwo = "x"
@@ -28,3 +25,18 @@ const gameSetup = (function settingBoard() {
     return {getBoard, getPlayerOne, getPlayerTwo}
 })()
 
+// This is the factory function for both of the players, it relies on closure
+// to prevent the record and the marker values from being accessed directly
+
+const createPlayer = function(name, playerMarker) {
+    let record = 0;
+    let marker = playerMarker; 
+
+    const getPlayerName = () => {return name}
+    const getPlayerMarker = () => {return marker}
+    const setPlayerMarker = () => {return marker} 
+    const getRecord = () => {return record}
+    const increaseRecord = () => {record++, getRecord()}
+
+    return {getPlayerName, getPlayerMarker, setPlayerMarker, getRecord, increaseRecord}
+}
