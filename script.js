@@ -14,9 +14,15 @@ const gameSetup = (function settingBoard() {
      log a message with the update: */
 
     const updateBoard = (player, marker, row, col) => {
+       if (matrixBoard[row][col] != "[ ]") {
+        console.log("This cell is already occupied")
+        console.log(matrixBoard)
+       }
+       else {
         matrixBoard[row].splice(col, 1, `[${marker}]`);
         console.log(`${player}'s move:`)
         console.log(matrixBoard)
+       }
     }
 
     console.log(`The game is afoot. 
@@ -24,9 +30,10 @@ const gameSetup = (function settingBoard() {
         Player Two = x
         
         The board: `)
+    console.log(matrixBoard)
 
 
-    return { getBoard, updateBoard, getPlayerOne, getPlayerTwo }
+    return { getBoard, updateBoard}
 })()
 
 // This is the factory function for both of the players, it relies on closure
@@ -46,8 +53,8 @@ const createPlayer = function (name, playerMarker) {
 }
 
 
-const playerOne = createPlayer(prompt(`Player One: `), "0");
-const playerTwo = createPlayer(prompt(`Player Two: `), "x");
+const playerOne = createPlayer(`Player One`, "0");
+const playerTwo = createPlayer(`Player Two`, "x");
 
 console.log(`
     ${playerOne.getPlayerName()} is: ${playerOne.getPlayerMarker()}
