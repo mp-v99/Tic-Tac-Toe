@@ -26,6 +26,19 @@ const boardSetup = (function() {
        }
     }
 
+    const resetBoard =() => {
+
+        for (const row of matrixBoard) {
+            let i = 0;
+            for (const cell of row) {
+                row.splice(i, 1, "[ ]")
+                i++
+            }   
+        }
+        console.log(`Starting new game:`)
+        console.log(matrixBoard)
+    }
+
     console.log(`The game is afoot. 
         Player One = 0
         Player Two = x
@@ -34,7 +47,7 @@ const boardSetup = (function() {
     console.log(matrixBoard)
 
 
-    return {getBoard, updateBoard}
+    return {getBoard, updateBoard, resetBoard}
 })()
 
 // This is the factory function for both of the players, it relies on closure
@@ -55,11 +68,13 @@ const createPlayer = function (name, playerMarker) {
 }
 
 
+// Global Variables
+
 const playerOne = createPlayer(`Player One`, "0");
 const playerTwo = createPlayer(`Player Two`, "x");
 
  
-// This will be the gameLoop
+// This will be the gameController
 
 const gameController = function(player, row, col) {
 
@@ -71,8 +86,10 @@ const gameController = function(player, row, col) {
     
     let isBoardFull = checkBoardStatus();
 
-    isBoardFull ? console.log("The game is done"):
+    isBoardFull ? boardSetup.resetBoard():
     boardSetup.updateBoard(playerName, playerMarker, row, col); 
+    
+    
 }
 
 
@@ -97,10 +114,36 @@ const checkBoardStatus = function() {
     }
     else {
         return false
-    }       
-
+    }
+    
 };
 
 
 
+// Testing loop:
 
+const testLoop = (function()
+{
+    let i = 0;
+    let cell = 1;
+
+
+    for (const row of boardSetup.getBoard()) {
+        let j = 0;
+        i++
+
+        for (const col of row) {
+            j++
+
+            cell % 2 ? gameController(playerOne, i-1,j-1):
+            gameController(playerTwo, i-1,j-1)
+
+            cell++
+            
+        }
+    }
+
+    
+
+
+})();
