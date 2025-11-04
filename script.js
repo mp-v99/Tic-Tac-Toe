@@ -4,6 +4,7 @@
 // will "x" to player two
 
 const boardSetup = (function() {
+
     const matrixBoard = [["[ ]", "[ ]", "[ ]"],
                          ["[ ]", "[ ]", "[ ]"],
                          ["[ ]", "[ ]", "[ ]"]]
@@ -42,6 +43,7 @@ const boardSetup = (function() {
 const createPlayer = function (name, playerMarker) {
     let record = 0;
     let marker = playerMarker;
+    
 
     const getPlayerName = () => { return name }
     const getPlayerMarker = () => { return marker }
@@ -61,17 +63,25 @@ const playerTwo = createPlayer(`Player Two`, "x");
 
 const gameController = function(player, row, col) {
 
-    // These variables allow to have a different values each time that the function is invoked:
+    // These variables allow to have different values each time that the function is invoked, meaning that
+    // depending on the context, it stores a different player's value:
 
     const playerName = player.getPlayerName();
-    const playerMarker = player.getPlayerMarker();
+    const playerMarker = player.getPlayerMarker();    
+    
+    let isBoardFull = checkBoardStatus();
 
-    // This loop checks if the board is full. Future updates will include win check and resetting 
-    // the board
+    isBoardFull ? console.log("The game is done"):
+    boardSetup.updateBoard(playerName, playerMarker, row, col); 
+}
 
-    let isBoardFull = false;
+
+// This loop checks if the board is full. Future updates will include win check and resetting 
+// the board
+
+const checkBoardStatus = function() {
     let cellCount = 0;
- 
+
     for (const row of boardSetup.getBoard()) {
         for (const cell of row) {
            if (cell != "[ ]") {
@@ -83,13 +93,14 @@ const gameController = function(player, row, col) {
     // Change isBoardFull state if it meets condition. This will later evolve into win check and reset
 
     if (cellCount === 9) {
-        isBoardFull = true;
+       return true
     }
+    else {
+        return false
+    }       
 
-    isBoardFull ? console.log("The game is done"):
-    boardSetup.updateBoard(playerName, playerMarker, row, col); 
-
-   
+};
 
 
-}
+
+
