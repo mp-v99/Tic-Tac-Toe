@@ -5,9 +5,9 @@
 
 const boardSetup = (function() {
 
-    const matrixBoard = [["[ ]", "[ ]", "[ ]"],
-                         ["[ ]", "[ ]", "[ ]"],
-                         ["[ ]", "[ ]", "[ ]"]]
+    const matrixBoard = [["[0]", "[0]", "[x]"],
+                         ["[x]", "[0]", "[0]"],
+                         ["[x]", "[x]", "[0]"]]
 
     const getBoard = () => { return matrixBoard }
 
@@ -35,8 +35,6 @@ const boardSetup = (function() {
                 i++
             }   
         }
-        console.log(`Starting new game:`)
-        console.log(matrixBoard)
     }
 
     console.log(`The game is afoot. 
@@ -62,9 +60,10 @@ const createPlayer = function (name, playerMarker) {
     const getPlayerMarker = () => { return marker }
     const setPlayerMarker = () => { return marker }
     const getRecord = () => { return record }
-    const increaseRecord = () => { record++, getRecord() }
+    const increaseRecord = () => { record++}
 
-    return { getPlayerName, getPlayerMarker, setPlayerMarker, getRecord, increaseRecord }
+
+    return { getPlayerName, getPlayerMarker, setPlayerMarker, getRecord, increaseRecord}
 }
 
 
@@ -85,16 +84,20 @@ const gameController = function(player, row, col) {
     const playerMarker = player.getPlayerMarker();    
     
     let isBoardFull = checkBoardStatus();
-
-    isBoardFull ? boardSetup.resetBoard():
-    boardSetup.updateBoard(playerName, playerMarker, row, col); 
     
-    
+    if (isBoardFull)  { 
+        boardSetup.resetBoard();
+        console.log(`Starting new game:`)
+        boardSetup.updateBoard(playerName, playerMarker, row, col);
+    }
+    else {
+    boardSetup.updateBoard(playerName, playerMarker, row, col);
+    winCheck(player)
+    }
 }
 
 
-// This loop checks if the board is full. Future updates will include win check and resetting 
-// the board
+// This loop checks if the board is full. 
 
 const checkBoardStatus = function() {
     let cellCount = 0;
@@ -119,31 +122,31 @@ const checkBoardStatus = function() {
 };
 
 
+// This function checks for a win of the respective player. It loops through each row and checks if 
+// the player's marker makes 3 in a row. 
 
-// Testing loop:
+const winCheck = (player) => {
+    let marker = player.getPlayerMarker();
+    let playerName = player.getPlayerName();
 
-const testLoop = (function()
-{
-    let i = 0;
-    let cell = 1;
-
-
+    console.log(`Win check:`)
     for (const row of boardSetup.getBoard()) {
-        let j = 0;
-        i++
+        let rowCount = 0;
 
-        for (const col of row) {
-            j++
+        for (const cell of row) {
+            if (cell === `[${marker}]`) {rowCount++}
 
-            cell % 2 ? gameController(playerOne, i-1,j-1):
-            gameController(playerTwo, i-1,j-1)
-
-            cell++
-            
+        }
+        if (rowCount === 3) {
+            console.log(`${playerName} Wins!!!!!!!`);
+            player.increaseRecord()
+            boardSetup.resetBoard();
         }
     }
+};
 
-    
+// Run these commands to test it out:
 
+// gameController(playerOne, 0,2);
+// playerOne.getRecord();
 
-})();
