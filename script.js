@@ -5,9 +5,9 @@
 
 const boardSetup = (function() {
 
-    const matrixBoard = [["[ ]", "[ ]", "[ ]"],
-                         ["[ ]", "[0]", "[ ]"],
-                         ["[0]", "[ ]", "[ ]"]]
+    const matrixBoard = [["[0]", "[ ]", "[0]"],
+                         ["[x]", "[0]", "[x]"],
+                         ["[0]", "[x]", "[x]"]]
 
     const getBoard = () => { return matrixBoard }
 
@@ -83,18 +83,19 @@ const gameController = function(player, row, col) {
     const playerName = player.getPlayerName();
     const playerMarker = player.getPlayerMarker();    
     
-    
+     
+    boardSetup.updateBoard(playerName, playerMarker, row, col);
+    winCheck(player);
+
     let isBoardFull = checkBoardStatus();
+
+        if (isBoardFull) {
+            console.log("Game ended in a tie, Starting new game...") 
+            setTimeout(() => {                  // Had to use setTimeOut because the console was logging the board blank
+                boardSetup.resetBoard();        // skipping the last move
+            }, 2000);
+        }
     
-    if (isBoardFull)  { 
-        boardSetup.resetBoard();
-        console.log(`Starting new game:`)
-        boardSetup.updateBoard(playerName, playerMarker, row, col);
-    }
-    else {
-        boardSetup.updateBoard(playerName, playerMarker, row, col);
-        winCheck(player);
-    }
 
 }
 
