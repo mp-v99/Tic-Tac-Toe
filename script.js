@@ -90,13 +90,30 @@ const gameController = function(player, row, col) {
     const playerName = player.getPlayerName();
     const playerMarker = player.getPlayerMarker();    
  
-    let isPlayerTurn = checkTurn(playerName, playerMarker, gameLoop.getTurn());
+    // Module:
+
+    const isPlayerTurn = function(player, marker, turn) {
+        const isXTurn = turn % 2 === 0;
+        
+        if (isXTurn && marker === "0") {
+            console.log(`It is not ${player}'s turn`)
+            return false;
+        }
+        else if (!isXTurn && marker === "x") {
+            console.log(`It is not ${player}'s turn`)
+            return false;
+        }
+        else {
+            return true;
+        }
+    
+    };
    
-    if (!isPlayerTurn) {
+    if (!isPlayerTurn(playerName, playerMarker, gameLoop.getTurn())) {
         return
     }
 
-    else if (isPlayerTurn) {
+    else if (isPlayerTurn(playerName, playerMarker, gameLoop.getTurn())) {
 
     console.log(`This is the turn: ${gameLoop.getTurn() + 1}`);
    
@@ -122,22 +139,7 @@ const gameController = function(player, row, col) {
     }
 };
 
-const checkTurn = function(player, marker, turn) {
-    const isXTurn = turn % 2 === 0;
-    
-    if (isXTurn && marker === "0") {
-        console.log(`It is not ${player}'s turn`)
-        return false;
-    }
-    else if (!isXTurn && marker === "x") {
-        console.log(`It is not ${player}'s turn`)
-        return false;
-    }
-    else {
-        return true;
-    }
 
-};
 
 // This loop checks if the board is full.  
 
