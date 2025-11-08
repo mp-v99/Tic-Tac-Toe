@@ -123,11 +123,13 @@ const gameController = function(player, row, col) {
 };
 
 const checkTurn = function(player, marker, turn) {
-    if (turn === 1 && marker === "x" || turn === 3 && marker === "x" || turn === 5 && marker === "x" || turn === 7 && marker === "x") {
+    const isXTurn = turn % 2 === 0;
+    
+    if (isXTurn && marker === "0") {
         console.log(`It is not ${player}'s turn`)
         return false;
     }
-    else if (turn === 0 && marker === "0" || turn === 2 && marker === "0" || turn === 4 && marker === "0" || turn === 6 && marker === "0" || turn === 8 && marker === "0") {
+    else if (!isXTurn && marker === "x") {
         console.log(`It is not ${player}'s turn`)
         return false;
     }
