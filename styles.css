@@ -1,0 +1,63 @@
+/* max_off_the_code */
+
+@import "modern-normalize";
+
+/* use a more-intuitive box-sizing model */
+
+*, *::before, *::after {
+ box-sizing: border-box;
+}
+/*  remove default margin */
+* {
+ margin: 0;
+}
+
+
+/* remove lists default styles without ruining IOS screen reader accessibility  */
+ol[role="list"], ul[role="list"] {
+  list-style: none;
+  padding-inline: 0;
+}
+
+/* enable keyword animations */
+@media (prefers-reduced-motion: no-preference) {
+ html {
+   interpolate-size: allow-keywords;
+ }
+}
+body {
+ /* add accessible line-height */
+ line-height: 1.5;
+ /* improve text rendering */
+ -webkit-font-smoothing: antialiased;
+}
+/* improve media defaults */
+img, picture, video, canvas, svg {
+ display: block;
+ max-width: 100%;
+}
+/* inherit fonts for form controls */
+input, button, textarea, select {
+ font: inherit;
+}
+/* avoid text overflows */
+p, h1, h2, h3, h4, h5, h6 {
+ overflow-wrap: break-word;
+}
+/* improve line wrapping */
+p {
+ text-wrap: pretty;
+}
+h1, h2, h3, h4, h5, h6 {
+ text-wrap: balance;
+}
+
+/* off_the_button_styles */
+
+button {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
