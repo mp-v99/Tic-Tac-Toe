@@ -90,7 +90,7 @@ const gameController = function(player, row, col) {
     const playerName = player.getPlayerName();
     const playerMarker = player.getPlayerMarker();    
  
-    // Module:
+    // Modules:
 
     const isPlayerTurn = function(player, marker, turn) {
         const isXTurn = turn % 2 === 0;
@@ -108,64 +108,31 @@ const gameController = function(player, row, col) {
         }
     
     };
-   
-    if (!isPlayerTurn(playerName, playerMarker, gameLoop.getTurn())) {
-        return
-    }
 
-    else if (isPlayerTurn(playerName, playerMarker, gameLoop.getTurn())) {
+    // This loop checks if the board is full.  
 
-    console.log(`This is the turn: ${gameLoop.getTurn() + 1}`);
-   
-    gameLoop.updateBoard(playerName, playerMarker, row, col);
-    let isGameWon = winCheck(player);
-    let isBoardFull = checkBoardStatus();
+    const isBoardFull = function() {
+        let cellCount = 0;
 
-    if (isGameWon) {
-        return
-    }
-
-    else if (!isGameWon) {
-        if (isBoardFull) {
-            console.log("Game ended in a tie, Starting new game...") 
-            setTimeout(() => {                  // Had to use setTimeOut because the console was logging the board blank
-                gameLoop.resetGame();         // skipping the last move
-            }, 3000);
-        }
-        else {
-            return
-        }
-    }        
-    }
-};
-
-
-
-// This loop checks if the board is full.  
-
-const checkBoardStatus = function() {
-    let cellCount = 0;
-
-    for (const row of gameLoop.getBoard()) {
-        for (const cell of row) {
-           if (cell != "[ ]") {
-                cellCount++
+        for (const row of gameLoop.getBoard()) {
+            for (const cell of row) {
+            if (cell != "[ ]") {
+                    cellCount++
+                }
             }
         }
-    }
 
     // Change isBoardFull state if it meets condition. This will later evolve into win check and reset
 
-    if (cellCount === 9) {
-        console.log(cellCount)
-       return true
-    }
-    else {
-        return false
-    }
+        if (cellCount === 9) {
+            return true
+        }
+        else {
+            return false
+        }
     
     
-};
+    };
 
 
 // This function checks for a win of the respective player. It loops through an array of
@@ -173,7 +140,7 @@ const checkBoardStatus = function() {
 // as one of the combinations 
 
 
-const winCheck = function(player) {
+    const isGameWon = function(player) {
 
     const playerName = player.getPlayerName(); // I pass a player arg so that it knows which player is making the move
     const playerMarker = player.getPlayerMarker();
@@ -214,14 +181,48 @@ const winCheck = function(player) {
         player.increaseRecord()
         setTimeout(() => {                  // Had to use setTimeOut because the console was logging the board blank
             gameLoop.resetGame();        // skipping the last move
-        }, 3000);
+        }, 5000);
 
         return true;
     }
     else if (!hasCombination) {
         return false;
     }
+    };
+   
+    if (!isPlayerTurn(playerName, playerMarker, gameLoop.getTurn())) {
+        return
+    }
+
+    else if (isPlayerTurn(playerName, playerMarker, gameLoop.getTurn())) {
+
+    console.log(`This is the turn: ${gameLoop.getTurn() + 1}`);
+   
+    gameLoop.updateBoard(playerName, playerMarker, row, col);
+
+    if (isGameWon(player)) {
+        return
+    }
+
+    else if (!isGameWon(player)) {
+
+        if (isBoardFull()) {
+            console.log("Game ended in a tie, Starting new game...") 
+            setTimeout(() => {                  // Had to use setTimeOut because the console was logging the board blank
+                gameLoop.resetGame();         // skipping the last move
+            }, 5000);
+        }
+        else {
+            return
+        }
+    }        
+    }
 };
+
+
+
+
+
 
 // Run this command to test it out:
 // gameController(playerOne, 0,2);
