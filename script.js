@@ -9,7 +9,7 @@ const gameLoop = (function() {
                          0, 0, 0,
                          0, 0, 0]
 
-    let turn = 0;                
+    let turn = 1;                
 
     const getBoard = () => { return matrixBoard }
 
@@ -39,7 +39,7 @@ const gameLoop = (function() {
 
         // Reset turn count
 
-        turn = 0;
+        turn = 1;
 
         // Reset board
         let i = 0;
@@ -93,11 +93,11 @@ const gameController = function(player, square) {
     const checkTurn = function(player, marker, turn) {
         const isXTurn = turn % 2 === 0;
         
-        if (isXTurn && marker === "0") {
+        if (isXTurn && marker === "1") {
             console.log(`It is not ${player}'s turn`)
             return false;
         }
-        else if (!isXTurn && marker === "x") {
+        else if (!isXTurn && marker === "2") {
             console.log(`It is not ${player}'s turn`)
             return false;
         }
@@ -120,7 +120,7 @@ const gameController = function(player, square) {
             
         }
 
-    // Change isBoardFull state if it meets condition. This will later evolve into win check and reset
+    // Change isBoardFull state i(playerName, playerMarker, gameLoop.getTurn())f it meets condition. This will later evolve into win check and reset
 
         if (cellCount === 9) {
             return true
@@ -139,6 +139,10 @@ const gameController = function(player, square) {
 
 
     const isGameWon = function(player) {
+
+        //DOM Selection:
+
+        const resultBoard = document.querySelector(".result_board");
 
         const playerName = player.getPlayerName(); // I pass a player arg so that it knows which player is making the move
         const playerMarker = player.getPlayerMarker();
@@ -174,6 +178,7 @@ const gameController = function(player, square) {
         if (
         hasCombination) {   
             console.log(`${playerName} Wins!!!!!!!`);
+
             player.increaseRecord()
             setTimeout(() => {                  // Had to use setTimeOut because the console was logging the board blank
                 gameLoop.resetGame();        // skipping the last move
@@ -196,7 +201,7 @@ const gameController = function(player, square) {
 
     else if (isPlayerTurn) {
 
-    console.log(`This is the turn: ${gameLoop.getTurn() + 1}`);
+    console.log(`This is the turn: ${gameLoop.getTurn()}`);
    
     gameLoop.updateBoard(playerName, playerMarker, square);
 
@@ -233,8 +238,8 @@ squares.forEach((square, index) => {
         }
         else {
             (uxRound) % 2 === 0 ?
-            square.style.backgroundColor = "#E50914":
-            square.style.backgroundColor = "#00FFFF";
+            square.style.backgroundColor = "#00FFFF":
+            square.style.backgroundColor = "#E50914";
 
             square.className = 'square played'
             uxRound++
@@ -245,3 +250,4 @@ squares.forEach((square, index) => {
 
     })
 })
+ 
