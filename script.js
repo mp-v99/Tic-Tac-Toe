@@ -223,8 +223,22 @@ const gameController = function(player, row, col) {
 
 // DOM Control
 
-
-
-window.addEventListener('click', () => {
+const squares = document.querySelectorAll('.square');
+let uxRound = 0;
+squares.forEach((square) => {
     
+    square.addEventListener('click', () => {
+        if (square.className === "square played") {
+            return
+        }
+        else {
+            (uxRound) % 2 === 0 ?
+            square.style.backgroundColor = "#E50914":
+            square.style.backgroundColor = "#00FFFF";
+
+            square.className = 'square played'
+            uxRound++
+        }
+
+    })
 })
