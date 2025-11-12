@@ -48,6 +48,8 @@ const gameLoop = (function() {
             matrixBoard.splice(i, 1, 0)
             i++
         }
+
+        resetUI();
     }    
 
 
@@ -138,11 +140,7 @@ const gameController = function(player, square) {
 // as one of the combinations 
 
 
-    const isGameWon = function(player) {
-
-        //DOM Selection:
-
-        const resultBoard = document.querySelector(".result_board");
+    const checkWin = function(player) {
 
         const playerName = player.getPlayerName(); // I pass a player arg so that it knows which player is making the move
         const playerMarker = player.getPlayerMarker();
@@ -177,25 +175,19 @@ const gameController = function(player, square) {
 
         if (
         hasCombination) {   
-            console.log(`${playerName} Wins!!!!!!!`);
-            resultBoard.textContent = `${playerName} wins!`;
-
-            player.increaseRecord()
-            setTimeout(() => {                  // Had to use setTimeOut because the console was logging the board blank
-                gameLoop.resetGame();        // skipping the last move
-            }, 5000);
-
             return true;
         }
         else if (!hasCombination) {
             return false;
         }
+
+       
     };
 
     // Booleans:
 
-    const isPlayerTurn = checkTurn(playerName, playerMarker, gameLoop.getTurn())
-   
+    const isPlayerTurn = checkTurn(playerName, playerMarker, gameLoop.getTurn());
+    
     if (!isPlayerTurn) {
         return
     }
@@ -205,18 +197,37 @@ const gameController = function(player, square) {
     console.log(`This is the turn: ${gameLoop.getTurn()}`);
    
     gameLoop.updateBoard(playerName, playerMarker, square);
+    const isGameWon = checkWin(player);
 
-    if (isGameWon(player)) {
+    if (isGameWon) {
+        resultBoard.textContent = `${playerName} wins!`;
+
+        player.increaseRecord()
+        setTimeout(() => {                  // Had to use setTimeOut because the console was logging the board blank
+            gameLoop.resetGame();        // skipping the last move
+            playerMarker === "1" ?  playerOneRecord.textContent = `Record: ${player.getRecord()}` :
+            playerTwoRecord.textContent = `Record: ${player.getRecord()}`
+        }, 1500);
+
         return
     }
 
-    else if (!isGameWon(player)) {
+    else if (!isGameWon) {
 
         if (isBoardFull()) {
-            console.log("Game ended in a tie, Starting new game...") 
+            resultBoard.textContent = "Game ended in a tie.";
+
+            setTimeout(() => {
+                resultBoard.textContent = "Starting new game...";
+            }, 1500);
+
+            setTimeout(() => {
+                resultBoard.textContent = "";
+            }, 3000);
+
             setTimeout(() => {                  // Had to use setTimeOut because the console was logging the board blank
                 gameLoop.resetGame();         // skipping the last move
-            }, 5000);
+            }, 3000);
         }
         else {
             return
@@ -229,7 +240,11 @@ const gameController = function(player, square) {
 
 // DOM Control
 
+const resultBoard = document.querySelector(".result_board");
 const squares = document.querySelectorAll('.square');
+const playerOneRecord = document.querySelector('.player_one_record');
+const playerTwoRecord = document.querySelector('.player_two_record');
+
 let uxRound = 1;
 squares.forEach((square, index) => {
     
@@ -252,3 +267,15 @@ squares.forEach((square, index) => {
     })
 })
  
+
+//  UI board 
+
+const resetUI = function() {
+    squares.forEach((square) => {
+        square.style.backgroundColor = "black";
+        square.className = "square" 
+    });
+    
+    resultBoard.textContent = "";
+    uxRound = 1;
+}
