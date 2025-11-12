@@ -221,10 +221,10 @@ const gameController = function(player, row, col) {
 
 
 
+// DOM Control
 
 
 
-// Run this command to test it out:
-// gameController(playerOne, 0,2);
-
-
+window.addEventListener('click', () => {
+    
+})
