@@ -178,6 +178,7 @@ const gameController = function(player, square) {
         if (
         hasCombination) {   
             console.log(`${playerName} Wins!!!!!!!`);
+            resultBoard.textContent = `${playerName} wins!`;
 
             player.increaseRecord()
             setTimeout(() => {                  // Had to use setTimeOut because the console was logging the board blank
