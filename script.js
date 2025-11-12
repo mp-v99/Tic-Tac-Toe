@@ -90,7 +90,7 @@ const gameController = function(player, square) {
  
     // Modules:
 
-    const isPlayerTurn = function(player, marker, turn) {
+    const checkTurn = function(player, marker, turn) {
         const isXTurn = turn % 2 === 0;
         
         if (isXTurn && marker === "0") {
@@ -140,57 +140,61 @@ const gameController = function(player, square) {
 
     const isGameWon = function(player) {
 
-    const playerName = player.getPlayerName(); // I pass a player arg so that it knows which player is making the move
-    const playerMarker = player.getPlayerMarker();
-    const matrixBoard = gameLoop.getBoard(); // unlike the board which is always the same
-    
-    const winCombinations = [[2,4,6], [0,4,8], [0,1,2], [3,4,5], [6,7,8], [0,3,6], [1,4,7], [2,5,8]]
+        const playerName = player.getPlayerName(); // I pass a player arg so that it knows which player is making the move
+        const playerMarker = player.getPlayerMarker();
+        const matrixBoard = gameLoop.getBoard(); // unlike the board which is always the same
+        
+        const winCombinations = [[2,4,6], [0,4,8], [0,1,2], [3,4,5], [6,7,8], [0,3,6], [1,4,7], [2,5,8]]
 
-        // [0, 1, 2]
-        // [3, 4, 5] 
-        // [6, 7, 8]
+            // [0, 1, 2]
+            // [3, 4, 5] 
+            // [6, 7, 8]
 
-    let markerCombinations = []; // It takes every index position where a player's marker is located at;
-    let hasCombination; // truthy/falsy value that will check if there are any winCombinations in the markerCombinations array
+        let markerCombinations = []; // It takes every index position where a player's marker is located at;
+        let hasCombination; // truthy/falsy value that will check if there are any winCombinations in the markerCombinations array
 
-    let i = 0;
+        let i = 0;
 
-    for (const cell of matrixBoard) {
-        if (cell === `[${playerMarker}]`) {
-            markerCombinations.splice(i, 1, i); 
+        for (const cell of matrixBoard) {
+            if (cell === `[${playerMarker}]`) {
+                markerCombinations.splice(i, 1, i); 
+            }
+            i++
         }
-        i++
-    }
 
-    
-    for (let i = 0; i< winCombinations.length; i++) {
-        hasCombination = winCombinations[i].every(value => markerCombinations.includes(value));
-        if (hasCombination === true) {
-            break;
+        
+        for (let i = 0; i< winCombinations.length; i++) {
+            hasCombination = winCombinations[i].every(value => markerCombinations.includes(value));
+            if (hasCombination === true) {
+                break;
+            }
         }
-    }
-    
+        
 
-    if (
-    hasCombination) {   
-        console.log(`${playerName} Wins!!!!!!!`);
-        player.increaseRecord()
-        setTimeout(() => {                  // Had to use setTimeOut because the console was logging the board blank
-            gameLoop.resetGame();        // skipping the last move
-        }, 5000);
+        if (
+        hasCombination) {   
+            console.log(`${playerName} Wins!!!!!!!`);
+            player.increaseRecord()
+            setTimeout(() => {                  // Had to use setTimeOut because the console was logging the board blank
+                gameLoop.resetGame();        // skipping the last move
+            }, 5000);
 
-        return true;
-    }
-    else if (!hasCombination) {
-        return false;
-    }
+            return true;
+        }
+        else if (!hasCombination) {
+            return false;
+        }
     };
+
+    // Booleans:
+
+    const isPlayerTurn = checkTurn(playerName, playerMarker, gameLoop.getTurn())
    
-    if (!isPlayerTurn(playerName, playerMarker, gameLoop.getTurn())) {
+    if (!isPlayerTurn) {
         return
     }
 
-    else if (isPlayerTurn(playerName, playerMarker, gameLoop.getTurn())) {
+    else if (isPlayerTurn) {
 
     console.log(`This is the turn: ${gameLoop.getTurn() + 1}`);
    
@@ -220,7 +224,7 @@ const gameController = function(player, square) {
 // DOM Control
 
 const squares = document.querySelectorAll('.square');
-let uxRound = 0;
+let uxRound = 1;
 squares.forEach((square, index) => {
     
     square.addEventListener('click', () => {
@@ -235,6 +239,9 @@ squares.forEach((square, index) => {
             square.className = 'square played'
             uxRound++
         }
+
+        uxRound % 2 === 0 ? gameController(playerOne, index):
+        gameController(playerTwo, index)
 
     })
 })
