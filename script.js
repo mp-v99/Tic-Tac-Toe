@@ -5,9 +5,9 @@
 
 const gameLoop = (function() {
 
-    const matrixBoard = [["[ ]", "[ ]", "[ ]"],
-                         ["[ ]", "[ ]", "[ ]"],
-                         ["[ ]", "[ ]", "[ ]"]]
+    const matrixBoard = [0, 0, 0,
+                         0, 0, 0,
+                         0, 0, 0]
 
     let turn = 0;                
 
@@ -16,13 +16,13 @@ const gameLoop = (function() {
     /* This function will receive the player's move to update the board and 
      log a message with the update: */
 
-    const updateBoard = (player, marker, row, col) => {
-       if (matrixBoard[row][col] != "[ ]") {
+    const updateBoard = (player, marker, square) => {
+       if (matrixBoard[square] != 0) {
         console.log("This cell is already occupied")
         console.log(matrixBoard)
        }
        else {
-        matrixBoard[row].splice(col, 1, `[${marker}]`);
+        matrixBoard.splice(square, 1, `[${marker}]`);
         console.log(`${player}'s move:`)
         console.log(matrixBoard)
 
@@ -42,13 +42,11 @@ const gameLoop = (function() {
         turn = 0;
 
         // Reset board
+        let i = 0;
 
-        for (const row of matrixBoard) {
-            let i = 0;
-            for (const cell of row) {
-                row.splice(i, 1, "[ ]")
-                i++
-            }   
+        for (let square of matrixBoard) {
+            matrixBoard.splice(i, 1, 0)
+            i++
         }
     }    
 
@@ -76,13 +74,13 @@ const createPlayer = function (name, playerMarker) {
 
 // Global Variables
 
-    const playerOne = createPlayer("Arnold", "x");
-    const playerTwo = createPlayer("Michael", "0")
+    const playerOne = createPlayer("Arnold", "1");
+    const playerTwo = createPlayer("Michael", "2")
     
 
 // This will be the gameController
 
-const gameController = function(player, row, col) {
+const gameController = function(player, square) {
 
     // These variables allow to have different values each time that the function is invoked, meaning that
     // depending on the context, it stores a different player's value:
@@ -114,12 +112,12 @@ const gameController = function(player, row, col) {
     const isBoardFull = function() {
         let cellCount = 0;
 
-        for (const row of gameLoop.getBoard()) {
-            for (const cell of row) {
-            if (cell != "[ ]") {
+        for (const square of gameLoop.getBoard()) {
+     
+            if (square != 0) {
                     cellCount++
                 }
-            }
+            
         }
 
     // Change isBoardFull state if it meets condition. This will later evolve into win check and reset
@@ -152,14 +150,12 @@ const gameController = function(player, row, col) {
         // [3, 4, 5] 
         // [6, 7, 8]
 
-
-    let flatBoard = matrixBoard.flat() // it turns the 2-D array into a 0-8 indexed array
     let markerCombinations = []; // It takes every index position where a player's marker is located at;
     let hasCombination; // truthy/falsy value that will check if there are any winCombinations in the markerCombinations array
 
     let i = 0;
 
-    for (const cell of flatBoard) {
+    for (const cell of matrixBoard) {
         if (cell === `[${playerMarker}]`) {
             markerCombinations.splice(i, 1, i); 
         }
@@ -198,7 +194,7 @@ const gameController = function(player, row, col) {
 
     console.log(`This is the turn: ${gameLoop.getTurn() + 1}`);
    
-    gameLoop.updateBoard(playerName, playerMarker, row, col);
+    gameLoop.updateBoard(playerName, playerMarker, square);
 
     if (isGameWon(player)) {
         return
@@ -225,7 +221,7 @@ const gameController = function(player, row, col) {
 
 const squares = document.querySelectorAll('.square');
 let uxRound = 0;
-squares.forEach((square) => {
+squares.forEach((square, index) => {
     
     square.addEventListener('click', () => {
         if (square.className === "square played") {
