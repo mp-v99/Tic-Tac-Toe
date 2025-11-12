@@ -3,25 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="script.js"></script>
+    <script src="script.js" defer></script>
     <link rel="stylesheet" href="styles.css">
     <title>Tic Tac Toe</title>
 </head>
 <body>
-    <div class="header">Tic Tac Toe: Stranger Grids</div>
+    <div class="header">Tic Tac Toe</div>
 
-    <div class="board_container">
-        <div class="button_container"><button id="square_1"></button></div>
-        <div class="button_container"><button id="square_2"></button></div>
-        <div class="button_container"><button id="square_3"></button></div>
-        <div class="button_container"><button id="square_4"></button></div>
-        <div class="button_container"><button id="square_5"></button></div>
-        <div class="button_container"><button id="square_6"></button></div>
-        <div class="button_container"><button id="square_7"></button></div>
-        <div class="button_container"><button id="square_8"></button></div>
-        <div class="button_container"><button id="square_9"></button></div>
+    <div class="board_display">
+        <div class="board_container">
+            <div class="button_container"><button class="square" id="square_1"></button></div>
+            <div class="button_container"><button class="square" id="square_2"></button></div>
+            <div class="button_container"><button class="square" id="square_3"></button></div>
+            <div class="button_container"><button class="square" id="square_4"></button></div>
+            <div class="button_container"><button class="square" id="square_5"></button></div>
+            <div class="button_container"><button class="square" id="square_6"></button></div>
+            <div class="button_container"><button class="square" id="square_7"></button></div>
+            <div class="button_container"><button class="square" id="square_8"></button></div>
+            <div class="button_container"><button class="square" id="square_9"></button></div>
+        </div>
+        <div class="result_board"></div>
+        <div class="player_leader_board">
+            <div>
+                <h4>Arnold</h4>
+                <h4>Record: 0</h4>
+            </div>
+            <div>
+                <h4>Michael</h4>
+                <h4>Record: 0</h4>
+            </div>
+        </div>
     </div>
 
-    <div class="footer">The Upside Down</div>
+    <div class="footer">Designed by Max Pons for The Odin Project</div>
 </body>
 </html>
