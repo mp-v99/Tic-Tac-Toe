@@ -118,8 +118,6 @@ const gameController = function(player, square) {
             
         }
 
-    // Change isBoardFull state i(playerName, playerMarker, gameLoop.getTurn())f it meets condition. This will later evolve into win check and reset
-
         if (cellCount === 9) {
             return true
         }
@@ -239,10 +237,11 @@ const squares = document.querySelectorAll('.square');
 const playerOneRecord = document.querySelector('.player_one_record');
 const playerTwoRecord = document.querySelector('.player_two_record');
 
-let uxRound = 1;
 squares.forEach((square, index) => {
     
+    
     square.addEventListener('click', () => {
+        console.log(gameLoop.getTurn());
         if (square.className === "square played") {
             resultBoard.textContent = "This cell is already occupied";
             setTimeout(() => {
@@ -251,16 +250,15 @@ squares.forEach((square, index) => {
             return
         }
         else {
-            (uxRound) % 2 === 0 ?
-            square.style.backgroundColor = "#00FFFF":
-            square.style.backgroundColor = "#E50914";
+            gameLoop.getTurn() % 2 === 0 ?
+            square.style.backgroundColor = "#00FFFF": //player two
+            square.style.backgroundColor = "#E50914"; // player one
 
             square.className = 'square played'
-            uxRound++
         }
 
-        uxRound % 2 === 0 ? gameController(playerOne, index):
-        gameController(playerTwo, index)
+        gameLoop.getTurn() % 2 === 0 ? gameController(playerTwo, index):
+        gameController(playerOne, index)
 
     })
 })
@@ -275,5 +273,4 @@ const resetUI = function() {
     });
     
     resultBoard.textContent = "";
-    uxRound = 1;
 }
