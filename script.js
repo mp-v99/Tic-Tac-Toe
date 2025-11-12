@@ -17,18 +17,14 @@ const gameLoop = (function() {
      log a message with the update: */
 
     const updateBoard = (player, marker, square) => {
-       if (matrixBoard[square] != 0) {
-        console.log("This cell is already occupied")
-        console.log(matrixBoard)
-       }
-       else {
+       
         matrixBoard.splice(square, 1, `[${marker}]`);
         console.log(`${player}'s move:`)
         console.log(matrixBoard)
 
         // Update the turn only after making a valid move:
         turn++
-       }
+       
     }
 
     const getTurn = () => {
@@ -193,8 +189,6 @@ const gameController = function(player, square) {
     }
 
     else if (isPlayerTurn) {
-
-    console.log(`This is the turn: ${gameLoop.getTurn()}`);
    
     gameLoop.updateBoard(playerName, playerMarker, square);
     const isGameWon = checkWin(player);
@@ -250,6 +244,10 @@ squares.forEach((square, index) => {
     
     square.addEventListener('click', () => {
         if (square.className === "square played") {
+            resultBoard.textContent = "This cell is already occupied";
+            setTimeout(() => {
+                resultBoard.textContent = "";
+            }, 500)
             return
         }
         else {
