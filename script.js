@@ -45,7 +45,7 @@ const gameLoop = (function() {
             i++
         }
 
-        resetUI();
+
     }    
 
 
@@ -192,13 +192,13 @@ const gameController = function(player, square) {
     const isGameWon = checkWin(player);
 
     if (isGameWon) {
-        resultBoard.textContent = `${playerName} wins!`;
+        uiModule.getResultBoard().textContent = `${playerName} wins!`;
 
         player.increaseRecord()
-        setTimeout(() => {                  // Had to use setTimeOut because the console was logging the board blank
-            gameLoop.resetGame();        // skipping the last move
-            playerMarker === "1" ?  playerOneRecord.textContent = `Record: ${player.getRecord()}` :
-            playerTwoRecord.textContent = `Record: ${player.getRecord()}`
+        setTimeout(() => {        
+            uiModule.resetUI();          
+            gameLoop.resetGame();     
+            uiModule.getPlayerRecord(player).textContent = `Record: ${player.getRecord()}`
         }, 1500);
 
         return
@@ -207,18 +207,19 @@ const gameController = function(player, square) {
     else if (!isGameWon) {
 
         if (isBoardFull()) {
-            resultBoard.textContent = "Game ended in a tie.";
+            uiModule.getResultBoard().textContent = "Game ended in a tie.";
 
             setTimeout(() => {
-                resultBoard.textContent = "Starting new game...";
+                uiModule.getResultBoard().textContent = "Starting new game...";
             }, 1500);
 
             setTimeout(() => {
-                resultBoard.textContent = "";
+                uiModule.getResultBoard().textContent = "";
             }, 3000);
 
-            setTimeout(() => {                  // Had to use setTimeOut because the console was logging the board blank
-                gameLoop.resetGame();         // skipping the last move
+            setTimeout(() => {         
+                uiModule.resetUI();
+                gameLoop.resetGame();       
             }, 3000);
         }
         else {
@@ -232,20 +233,49 @@ const gameController = function(player, square) {
 
 // DOM Control
 
-const resultBoard = document.querySelector(".result_board");
-const squares = document.querySelectorAll('.square');
-const playerOneRecord = document.querySelector('.player_one_record');
-const playerTwoRecord = document.querySelector('.player_two_record');
+const uiModule = (function() {
 
-squares.forEach((square, index) => {
+    // UI elements:
+
+    const resultBoard = document.querySelector(".result_board");
+    const squares = document.querySelectorAll('.square');
+    const playerOneRecord = document.querySelector('.player_one_record');
+    const playerTwoRecord = document.querySelector('.player_two_record');
+
+
+    const getResultBoard = () => {return resultBoard};
+    const getSquares = () => {return squares};
+    const getPlayerRecord = (player) => {
+        return player.getPlayerMarker() === "2" ? playerTwoRecord: playerOneRecord;
+    } 
+    //  UI board 
+
+    const resetUI = function() {
+        uiModule.getSquares().forEach((square) => {
+            square.style.backgroundColor = "black";
+            square.className = "square" 
+        });
+        
+        uiModule.getResultBoard().textContent = "";
+    }
+
+
+
+    return {getResultBoard, getSquares, getPlayerRecord, resetUI}
+
+})();
+
+
+
+uiModule.getSquares().forEach((square, index) => {
     
     
     square.addEventListener('click', () => {
         console.log(gameLoop.getTurn());
         if (square.className === "square played") {
-            resultBoard.textContent = "This cell is already occupied";
+            uiModule.getResultBoard().textContent = "This cell is already occupied";
             setTimeout(() => {
-                resultBoard.textContent = "";
+                uiModule.getResultBoard().textContent = "";
             }, 500)
             return
         }
@@ -264,13 +294,3 @@ squares.forEach((square, index) => {
 })
  
 
-//  UI board 
-
-const resetUI = function() {
-    squares.forEach((square) => {
-        square.style.backgroundColor = "black";
-        square.className = "square" 
-    });
-    
-    resultBoard.textContent = "";
-}
