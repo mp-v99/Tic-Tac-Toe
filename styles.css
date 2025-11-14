@@ -6,6 +6,7 @@
 :root {
     --danger-red: #E50914;
     --soft-gray: #515151;
+    --accent-cyan: #00FFFF;
   }
 
 *, *::before, *::after {
@@ -115,8 +116,6 @@ div {
     min-width: 450px;
 
     /* board display container*/
-
-    border: 1px solid red;
 }
 
 .board_container {
@@ -125,12 +124,13 @@ div {
     flex: 1;
 
     max-height: 500px;
+    min-height: 250px;
     aspect-ratio: 1 / 1; /* forces perfect square */
 
     display: grid;
     grid-template: repeat(3,1fr) / repeat(3,1fr);
 
-    padding: 5%;
+    
 
     gap: 1rem;
 
@@ -141,7 +141,7 @@ div {
 
 .board_container>.button_container>button {
     background-color: transparent;
-    box-shadow: inset 1px 1px 5px 0px var(--danger-red);
+    box-shadow: inset 0px 0px 7px 1px var(--danger-red);
     border-radius: 1rem;
 
     flex: 1;
@@ -159,6 +159,10 @@ div {
 
 
     /* game updates  */
+}
+
+.menu {
+    flex: 1;
 }
 
 
