@@ -245,6 +245,12 @@ const uiModule = (function() {
     const playerTwoRecord = document.querySelector('.player_two_record');
     const playerInput = document.querySelectorAll('.player_input');
 
+    // Player markers for UI game:
+
+    
+  
+
+
     const getResultBoard = () => {return resultBoard};
     const getRestartButton = () => {return restartButton};
     const getPlayerInput = () => {return playerInput}
@@ -252,11 +258,28 @@ const uiModule = (function() {
     const getPlayerRecord = (player) => {
         return player.getPlayerMarker() === "2" ? playerTwoRecord: playerOneRecord;
     } 
+    const getPlayerOneMarker = () => {
+        const playerOneMarker = document.createElement('img');
+
+        playerOneMarker.src = 'pics/player_x_marker.png';
+        playerOneMarker.alt = 'player_one_marker';
+
+        return playerOneMarker;
+    }
+    const getPlayerTwoMarker = () => {
+        const playerTwoMarker = document.createElement('img');
+
+        playerTwoMarker.src = 'pics/player_0_marker.png';
+        playerTwoMarker.alt = 'player_two_marker';
+
+        return playerTwoMarker;
+    }
+
     //  UI board 
 
     const resetUI = function() {
         uiModule.getSquares().forEach((square) => {
-            square.style.backgroundColor = "black";
+            square.innerHTML = '';
             square.className = "square" 
         });
         
@@ -265,7 +288,7 @@ const uiModule = (function() {
 
 
 
-    return {getResultBoard, getSquares, getPlayerRecord, resetUI, getRestartButton, getPlayerInput}
+    return {getResultBoard, getSquares, getPlayerRecord, resetUI, getRestartButton, getPlayerInput, getPlayerOneMarker, getPlayerTwoMarker}
 
 })();
 
@@ -275,7 +298,10 @@ uiModule.getSquares().forEach((square, index) => {
     
     
     square.addEventListener('click', () => {
-        console.log(gameLoop.getTurn());
+
+        const currentTurn = gameLoop.getTurn();
+
+        console.log(currentTurn);
         if (square.className === "square played") {
             uiModule.getResultBoard().textContent = "This cell is already occupied";
             setTimeout(() => {
@@ -284,14 +310,14 @@ uiModule.getSquares().forEach((square, index) => {
             return
         }
         else {
-            gameLoop.getTurn() % 2 === 0 ?
-            square.style.backgroundColor = "#00FFFF": //player two
-            square.style.backgroundColor = "#E50914"; // player one
+            currentTurn % 2 === 0 ?
+            square.appendChild(uiModule.getPlayerTwoMarker()): //player two
+            square.appendChild(uiModule.getPlayerOneMarker()); // player one
 
             square.className = 'square played'
         }
 
-        gameLoop.getTurn() % 2 === 0 ? gameController(playerTwo, index):
+        currentTurn % 2 === 0 ? gameController(playerTwo, index):
         gameController(playerOne, index)
 
     })
