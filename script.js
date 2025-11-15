@@ -58,22 +58,23 @@ const gameLoop = (function() {
 
 const createPlayer = function (name, playerMarker) {
     let record = 0;
+    let playerName = `@${name}`;
     let marker = playerMarker;
     
-
-    const getPlayerName = () => { return name }
+    const setPlayerName = (name) => {playerName = `@${name}`}
+    const getPlayerName = () => { return playerName }
     const getPlayerMarker = () => { return marker }
     const getRecord = () => { return record }
     const increaseRecord = () => { record++}
 
 
-    return {getPlayerName, getPlayerMarker, getRecord, increaseRecord}
+    return {setPlayerName, getPlayerName, getPlayerMarker, getRecord, increaseRecord}
 };
 
 // Global Variables
 
-    const playerOne = createPlayer("Arnold", "1");
-    const playerTwo = createPlayer("Michael", "2")
+    const playerOne = createPlayer("Player One", "1");
+    const playerTwo = createPlayer("Player Two", "2")
     
 
 // This will be the gameController
@@ -242,10 +243,11 @@ const uiModule = (function() {
     const restartButton = document.querySelector("#restart_button");
     const playerOneRecord = document.querySelector('.player_one_record');
     const playerTwoRecord = document.querySelector('.player_two_record');
-
+    const playerInput = document.querySelectorAll('.player_input');
 
     const getResultBoard = () => {return resultBoard};
     const getRestartButton = () => {return restartButton};
+    const getPlayerInput = () => {return playerInput}
     const getSquares = () => {return squares};
     const getPlayerRecord = (player) => {
         return player.getPlayerMarker() === "2" ? playerTwoRecord: playerOneRecord;
@@ -263,7 +265,7 @@ const uiModule = (function() {
 
 
 
-    return {getResultBoard, getSquares, getPlayerRecord, resetUI, getRestartButton}
+    return {getResultBoard, getSquares, getPlayerRecord, resetUI, getRestartButton, getPlayerInput}
 
 })();
 
@@ -300,3 +302,15 @@ uiModule.getRestartButton().addEventListener("click", () => {
     gameLoop.resetGame();
 })
 
+uiModule.getPlayerInput().forEach((input) => {
+    input.addEventListener('input', (event) => {
+
+        if (input.id === "player_one_name") {
+            playerOne.setPlayerName(event.target.value);
+        }
+        else if (input.id === "player_two_name") {
+            playerTwo.setPlayerName(event.target.value);
+        }
+
+    });
+})
