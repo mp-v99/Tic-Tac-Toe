@@ -6,6 +6,7 @@
 :root {
     --danger-red: #E50914;
     --soft-gray: #515151;
+    --tough-gray: #222222;
     --accent-cyan: #00FFFF;
   }
 
@@ -184,11 +185,13 @@ div {
 }
 
 
-.menu>button:hover {
+.menu>button:hover,
+a:hover {
     scale: 1.02;
 }
 
-.menu>button:active {
+.menu>button:active,
+a:active {
     scale: 1;
 }
 
@@ -225,3 +228,12 @@ input {
 
 }
 
+a {
+    color: var(--tough-gray);
+    font-weight: bold;
+    text-decoration: none;
+}
+
+a:visited {
+    color: var(--tough-gray);
+}
