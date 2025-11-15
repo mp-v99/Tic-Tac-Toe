@@ -192,7 +192,7 @@ div {
 
 .menu>button {
     background-color: transparent;
-    box-shadow: inset 0px 0px 7px 1px var(--danger-red);
+    box-shadow: inset 0px 0px 5px 2px var(--danger-red);
     border-radius: 1rem;
 
     flex: 1;
@@ -200,8 +200,7 @@ div {
     height: 30px;
     width: 100px;
 
-    color: black;
-    background-color: var(--danger-red);
+    color: var(--danger-red);
     font-weight: bold;
 }
 
