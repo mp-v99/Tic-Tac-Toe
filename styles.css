@@ -1,6 +1,10 @@
 /* max_off_the_code */
 /* use a more-intuitive box-sizing model */
 
+/* Stranger Things Font Family: */
+
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300..700;1,300..700&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+
 /* CUSTOM PROPERTIES */
 
 :root {
@@ -8,6 +12,7 @@
     --soft-gray: #515151;
     --tough-gray: #222222;
     --accent-cyan: #00FFFF;
+    --str_things_font: 'Cormorant Garamond';
   }
 
 *, *::before, *::after {
@@ -96,6 +101,22 @@ div {
     justify-content: center;
 
     flex: 1;
+
+}
+
+.header>h1 {
+    font-family: var(--str_things_font);
+
+    font-size: 3rem;
+    color: var(--danger-red);
+    font-weight: bold;
+    letter-spacing: 0.3rem;
+    text-transform: uppercase;
+  
+    text-shadow:
+      0 0 5px var(--danger-red),
+      0 0 10px #b0060f,
+      0 0 20px #700000;
 }
 
 
