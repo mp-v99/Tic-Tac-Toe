@@ -163,18 +163,61 @@ div {
 
 .menu {
     flex: 1;
+
+    display: flex;
+    align-items: center;
 }
 
+.menu>button {
+    background-color: transparent;
+    box-shadow: inset 0px 0px 7px 1px var(--danger-red);
+    border-radius: 1rem;
+
+    flex: 1;
+
+    height: 30px;
+    width: 100px;
+
+    color: black;
+    background-color: var(--danger-red);
+    font-weight: bold;
+}
+
+
+.menu>button:hover {
+    scale: 1.02;
+}
+
+.menu>button:active {
+    scale: 1;
+}
+
+.menu>div {
+    display: flex;
+    flex-direction: column;
+}
+
+input {
+    width: 150px;
+    background-color: transparent;
+    outline: none;
+    border: 0px;
+    margin: 0px;
+    padding: 0px;
+    color: var(--soft-gray);
+    accent-color: var(--soft-gray);
+}
 
 .player_leader_board {
     display: flex;
     align-items: center;
+    justify-content: flex-end;
 
     gap: 5rem;
 }
 
 .player_leader_board>div {
-    text-align: center;
+    flex: 1;
 }
 
 .button_container { 
