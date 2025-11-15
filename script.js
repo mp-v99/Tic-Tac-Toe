@@ -239,11 +239,13 @@ const uiModule = (function() {
 
     const resultBoard = document.querySelector(".result_board");
     const squares = document.querySelectorAll('.square');
+    const restartButton = document.querySelector("#restart_button");
     const playerOneRecord = document.querySelector('.player_one_record');
     const playerTwoRecord = document.querySelector('.player_two_record');
 
 
     const getResultBoard = () => {return resultBoard};
+    const getRestartButton = () => {return restartButton};
     const getSquares = () => {return squares};
     const getPlayerRecord = (player) => {
         return player.getPlayerMarker() === "2" ? playerTwoRecord: playerOneRecord;
@@ -261,7 +263,7 @@ const uiModule = (function() {
 
 
 
-    return {getResultBoard, getSquares, getPlayerRecord, resetUI}
+    return {getResultBoard, getSquares, getPlayerRecord, resetUI, getRestartButton}
 
 })();
 
@@ -293,4 +295,8 @@ uiModule.getSquares().forEach((square, index) => {
     })
 })
  
+uiModule.getRestartButton().addEventListener("click", () => {
+    uiModule.resetUI();
+    gameLoop.resetGame();
+})
 
