@@ -11,13 +11,8 @@ const gameBoard = (function() {
 
     const getBoard = () => { return matrixBoard }    
 
-    const updateBoard = (player, marker, square) => {
-       
-        matrixBoard.splice(square, 1, `[${marker}]`);
-
-        // Update the turn only after making a valid move:
-        turn++
-       
+    const updateBoard = (marker, square) => {
+        matrixBoard.splice(square, 1, `[${marker}]`);       
     }
 
     const resetBoard = () => {
@@ -28,12 +23,79 @@ const gameBoard = (function() {
                matrixBoard.splice(i, 1, 0)
                i++
            }
+           console.log(matrixBoard)
+
     }
 
     return {getBoard, updateBoard, resetBoard}
 })();
 
 const gameLoop = function() {
+
+    let turn = 1;                
+  
+    const getTurn = () => {
+        return turn
+    }
+
+    const resetGame = () => {
+        // Reset turn count
+        turn = 1;
+    }    
+
+     // Booleans:
+
+     const isPlayerTurn = gameController.checkTurn(player.getPlayerName(), player.getPlayerMarker(), getTurn());
+    
+     if (!isPlayerTurn) {
+         return
+     }
+ 
+     else if (isPlayerTurn) {
+    
+     gameBoard.updateBoard(player.getPlayerName(), player.getPlayerMarker(), square);
+     const isGameWon = gameController.checkWin(player);
+ 
+     if (isGameWon) {
+         uiModule.getResultBoard().textContent = `${playerName} wins!`;
+ 
+         player.increaseRecord()
+         setTimeout(() => {        
+             uiModule.resetUI();          
+             gameLoop.resetGame();     
+             uiModule.getPlayerRecord(player).textContent = `Record: ${player.getRecord()}`
+         }, 1500);
+ 
+         return
+     }
+ 
+     else if (!isGameWon) {
+ 
+         if (isBoardFull()) {
+             uiModule.getResultBoard().textContent = "Game ended in a tie.";
+ 
+             setTimeout(() => {
+                 uiModule.getResultBoard().textContent = "Starting new game...";
+             }, 1500);
+ 
+             setTimeout(() => {
+                 uiModule.getResultBoard().textContent = "";
+             }, 3000);
+ 
+             setTimeout(() => {         
+                 uiModule.resetUI();
+                 gameLoop.resetGame();       
+             }, 3000);
+         }
+         else {
+             return
+         }
+     }        
+     }
+
+
+
+    return {getTurn, resetGame}
 };
 
 // This is the factory function for both of the players, it relies on closure
@@ -56,15 +118,112 @@ const createPlayer = function (name, playerMarker) {
 
 // Global Variables
 
-
-
+    const playerOne = createPlayer("Player One", "1");
+    const playerTwo = createPlayer("Player Two", "2")
+    
 
 // This will be the gameController
 
 const gameController = (function() {
 
+    // These variables allow to have different values each time that the function is invoked, meaning that
+    // depending on the context, it stores a different player's value: 
  
+    // Modules:
 
+    const checkTurn = function(player, marker, turn) {
+        const isXTurn = turn % 2 === 0;
+        
+        if (isXTurn && marker === "1") {
+            console.log(`It is not ${player}'s turn`)
+            return false;
+        }
+        else if (!isXTurn && marker === "2") {
+            console.log(`It is not ${player}'s turn`)
+            return false;
+        }
+        else {
+            return true;
+        }
+    
+    };
+
+    // This loop checks if the board is full.  
+
+    const isBoardFull = function() {
+        let cellCount = 0;
+
+        for (const square of gameLoop.getBoard()) {
+     
+            if (square != 0) {
+                    cellCount++
+                }
+            
+        }
+
+        if (cellCount === 9) {
+            return true
+        }
+        else {
+            return false
+        }
+    
+    
+    };
+
+
+// This function checks for a win of the respective player. It loops through an array of
+// winning combinations and returns true of the player's marker features the same triplet
+// as one of the combinations 
+
+
+    const checkWin = function(player) {
+
+        const playerName = player.getPlayerName(); // I pass a player arg so that it knows which player is making the move
+        const playerMarker = player.getPlayerMarker();
+        const matrixBoard = gameLoop.getBoard(); // unlike the board which is always the same
+        
+        const winCombinations = [[2,4,6], [0,4,8], [0,1,2], [3,4,5], [6,7,8], [0,3,6], [1,4,7], [2,5,8]]
+
+            // [0, 1, 2]
+            // [3, 4, 5] 
+            // [6, 7, 8]
+
+        let markerCombinations = []; // It takes every index position where a player's marker is located at;
+        let hasCombination; // truthy/falsy value that will check if there are any winCombinations in the markerCombinations array
+
+        let i = 0;
+
+        for (const cell of matrixBoard) {
+            if (cell === `[${playerMarker}]`) {
+                markerCombinations.splice(i, 1, i); 
+            }
+            i++
+        }
+
+        
+        for (let i = 0; i< winCombinations.length; i++) {
+            hasCombination = winCombinations[i].every(value => markerCombinations.includes(value));
+            if (hasCombination === true) {
+                break;
+            }
+        }
+        
+
+        if (
+        hasCombination) {   
+            return true;
+        }
+        else if (!hasCombination) {
+            return false;
+        }
+
+       
+    };
+
+   
+
+    return {checkTurn, isBoardFull, checkWin}
 })();
 
 
