@@ -6,13 +6,13 @@
 const gameBoard = (function() {
 
     const matrixBoard = [0, 0, 0,
-        0, 0, 0,
-        0, 0, 0]
+                         0, 0, 0,
+                         0, 0, 0]
 
     const getBoard = () => { return matrixBoard }    
 
     const updateBoard = (marker, square) => {
-        matrixBoard.splice(square, 1, `[${marker}]`);       
+        matrixBoard.splice(square, 1, `${marker}`);       
     }
 
     const resetBoard = () => {
@@ -30,7 +30,7 @@ const gameBoard = (function() {
     const isBoardFull = function() {
         let cellCount = 0;
 
-        for (const square of gameLoop.getBoard()) {
+        for (const square of matrixBoard) {
      
             if (square != 0) {
                     cellCount++
@@ -60,6 +60,10 @@ const gameLoop = (function() {
         return turn
     }
 
+    const increaseTurn = () => {
+        return turn++
+    }
+
     const resetGame = () => {
         // Reset turn count
         turn = 1;
@@ -84,8 +88,38 @@ const gameLoop = (function() {
     
     };
 
+    const checkWin = function(player) { 
+        const playerMarker = player.getPlayerMarker(); 
+        const matrixBoard = gameBoard.getBoard(); 
+        const winCombinations = [[2,4,6], [0,4,8], [0,1,2], [3,4,5], [6,7,8], [0,3,6], [1,4,7], [2,5,8]] 
+        // [0, 1, 2] // [3, 4, 5] // [6, 7, 8] 
+        let markerCombinations = [];  
+        let hasCombination;
+        let i = 0; 
+        
+        for (const cell of matrixBoard) { 
+            if (cell === playerMarker) { 
+                markerCombinations.splice(i, 1, i); } i++ 
+                console.log(markerCombinations)
+        }
 
-    return {getTurn, checkPlayerTurn, resetGame}
+        for (let i = 0; i< winCombinations.length; i++) { 
+            hasCombination = winCombinations[i].every(value => markerCombinations.includes(value)); 
+            if (hasCombination === true) { 
+                break; 
+            } 
+        } 
+        
+        if ( hasCombination) { 
+            return true; 
+        } 
+        else if (!hasCombination) { 
+           
+            return false; 
+        } 
+    };
+
+    return {getTurn, increaseTurn, checkPlayerTurn, resetGame, checkWin}
 })();
 
 // This is the factory function for both of the players, it relies on closure
@@ -122,6 +156,7 @@ const gameController = function(player, move) {
     const playerName  = player.getPlayerName();
     const playerMarker = player.getPlayerMarker();
     const isPlayerTurn = gameLoop.checkPlayerTurn(playerName, playerMarker);
+    const isBoardFull = gameBoard.isBoardFull();
     
         if (!isPlayerTurn) {
             return
@@ -129,8 +164,9 @@ const gameController = function(player, move) {
     
         else if (isPlayerTurn) {
        
-        gameBoard.updateBoard(playerName, playerMarker, move);
-        const isGameWon = gameController.checkWin(player);
+        gameBoard.updateBoard(playerMarker, move);
+        gameLoop.increaseTurn();
+        const isGameWon = gameLoop.checkWin(player);
     
         if (isGameWon) {
             uiModule.getResultBoard().textContent = `${playerName} wins!`;
@@ -147,7 +183,7 @@ const gameController = function(player, move) {
     
         else if (!isGameWon) {
     
-            if (isBoardFull()) {
+            if (isBoardFull) {
                 uiModule.getResultBoard().textContent = "Game ended in a tie.";
     
                 setTimeout(() => {
@@ -238,6 +274,7 @@ uiModule.getSquares().forEach((square, index) => {
     square.addEventListener('click', () => {
 
         const currentTurn = gameLoop.getTurn();
+        console.log(currentTurn)
 
         if (square.className === "square played") {
             uiModule.getResultBoard().textContent = "This cell is already occupied";
