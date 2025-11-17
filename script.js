@@ -23,7 +23,6 @@ const gameBoard = (function() {
                matrixBoard.splice(i, 1, 0)
                i++
            }
-           console.log(matrixBoard)
 
     }
 
@@ -100,7 +99,6 @@ const gameLoop = (function() {
         for (const cell of matrixBoard) { 
             if (cell === playerMarker) { 
                 markerCombinations.splice(i, 1, i); } i++ 
-                console.log(markerCombinations)
         }
 
         for (let i = 0; i< winCombinations.length; i++) { 
@@ -156,7 +154,7 @@ const gameController = function(player, move) {
     const playerName  = player.getPlayerName();
     const playerMarker = player.getPlayerMarker();
     const isPlayerTurn = gameLoop.checkPlayerTurn(playerName, playerMarker);
-    const isBoardFull = gameBoard.isBoardFull();
+    
     
         if (!isPlayerTurn) {
             return
@@ -170,7 +168,7 @@ const gameController = function(player, move) {
     
         if (isGameWon) {
             uiModule.getResultBoard().textContent = `${playerName} wins!`;
-    
+            
             player.increaseRecord()
             setTimeout(() => {        
                 uiModule.resetUI();          
@@ -182,6 +180,8 @@ const gameController = function(player, move) {
         }
     
         else if (!isGameWon) {
+
+            const isBoardFull = gameBoard.isBoardFull();
     
             if (isBoardFull) {
                 uiModule.getResultBoard().textContent = "Game ended in a tie.";
@@ -270,31 +270,30 @@ const uiModule = (function() {
 
 uiModule.getSquares().forEach((square, index) => {
     
-    
     square.addEventListener('click', () => {
 
-        const currentTurn = gameLoop.getTurn();
-        console.log(currentTurn)
+            const currentTurn = gameLoop.getTurn();
 
-        if (square.className === "square played") {
-            uiModule.getResultBoard().textContent = "This cell is already occupied";
-            setTimeout(() => {
-                uiModule.getResultBoard().textContent = "";
-            }, 500)
-            return
-        }
-        else {
-            currentTurn % 2 === 0 ?
-            square.appendChild(uiModule.getPlayerTwoMarker()): //player two
-            square.appendChild(uiModule.getPlayerOneMarker()); // player one
+            if (square.className === "square played") {
+                uiModule.getResultBoard().textContent = "This cell is already occupied";
+                setTimeout(() => {
+                    uiModule.getResultBoard().textContent = "";
+                }, 500)
+                return
+            }
+            else {
+                currentTurn % 2 === 0 ?
+                square.appendChild(uiModule.getPlayerTwoMarker()): //player two
+                square.appendChild(uiModule.getPlayerOneMarker()); // player one
 
-            square.className = 'square played'
-        }
+                square.className = 'square played'
+            }
 
-        currentTurn % 2 === 0 ? gameController(playerTwo, index):
-        gameController(playerOne, index)
+            currentTurn % 2 === 0 ? gameController(playerTwo, index):
+            gameController(playerOne, index)
 
     })
+
 })
  
 uiModule.getRestartButton().addEventListener("click", () => {
