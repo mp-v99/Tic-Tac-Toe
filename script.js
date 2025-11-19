@@ -47,8 +47,18 @@ const gameBoard = (function() {
     
     };
 
+    const isCellOccupied = function(cell) {
+        if (matrixBoard[cell] != 0) {
+            return true;
+        }
 
-    return {getBoard, updateBoard, resetBoard, isBoardFull}
+        else {
+            return false;
+        }
+    }
+
+
+    return {getBoard, updateBoard, resetBoard, isBoardFull, isCellOccupied}
 })();
 
 const gameLoop = (function() {
@@ -154,60 +164,80 @@ const gameController = function(player, move) {
     const playerName  = player.getPlayerName();
     const playerMarker = player.getPlayerMarker();
     const isPlayerTurn = gameLoop.checkPlayerTurn(playerName, playerMarker);
-    
-    
-        if (!isPlayerTurn) {
-            return
-        }
-    
-        else if (isPlayerTurn) {
-       
-        gameBoard.updateBoard(playerMarker, move);
-        gameLoop.increaseTurn();
-        const isGameWon = gameLoop.checkWin(player);
-    
-        if (isGameWon) {
-            uiModule.getResultBoard().textContent = `${playerName} wins!`;
-            
-            player.increaseRecord()
-            setTimeout(() => {        
-                uiModule.resetUI();          
-                gameLoop.resetGame();     
-                uiModule.getPlayerRecord(player).textContent = `Record: ${player.getRecord()}`
-            }, 1500);
-    
-            return
-        }
-    
-        else if (!isGameWon) {
 
-            const isBoardFull = gameBoard.isBoardFull();
+
+        if (gameBoard.isCellOccupied(move)) {
+            uiModule.getResultBoard().textContent = "This cell is already occupied";
+            setTimeout(() => {
+                uiModule.getResultBoard().textContent = "";
+            }, 500)
+            return
+        }
+
+        else if (!gameBoard.isCellOccupied(move)){
     
-            if (isBoardFull) {
-                uiModule.getResultBoard().textContent = "Game ended in a tie.";
-    
-                setTimeout(() => {
-                    uiModule.getResultBoard().textContent = "Starting new game...";
-                }, 1500);
-    
-                setTimeout(() => {
-                    uiModule.getResultBoard().textContent = "";
-                }, 3000);
-    
-                setTimeout(() => {         
-                    uiModule.resetUI();
-                    gameLoop.resetGame();       
-                }, 3000);
-            }
-            else {
+            if (!isPlayerTurn) {
                 return
             }
-        }        
-        }   
+        
+            else if (isPlayerTurn) {
+        
+            gameBoard.updateBoard(playerMarker, move);
+            gameLoop.increaseTurn();
+            const isGameWon = gameLoop.checkWin(player);
+
+            // Append Marker in DOM:
+            
+
+        
+            if (isGameWon) {
+            
+                uiModule.getResultBoard().textContent = `${playerName} wins!`;
+                
+                player.increaseRecord()
+                setTimeout(() => {        
+                    uiModule.resetUI();          
+                    gameLoop.resetGame();     
+                    uiModule.getPlayerRecord(player).textContent = `Record: ${player.getRecord()}`
+                }, 1500);
+        
+                return
+            }
+        
+            else if (!isGameWon) {
+
+                const isBoardFull = gameBoard.isBoardFull();
+        
+                if (isBoardFull) {
+                    uiModule.getResultBoard().textContent = "Game ended in a tie.";
+        
+                    setTimeout(() => {
+                        uiModule.getResultBoard().textContent = "Starting new game...";
+                    }, 1500);
+        
+                    setTimeout(() => {
+                        uiModule.getResultBoard().textContent = "";
+                    }, 3000);
+        
+                    setTimeout(() => {         
+                        uiModule.resetUI();
+                        gameLoop.resetGame();       
+                    }, 3000);
+                }
+                else {
+                    return
+                }
+            }        
+            }   
+        }
 };
 
 
-
+//  uiModule.getResultBoard().textContent = "This cell is already occupied";
+//  setTimeout(() => {
+//    uiModule.getResultBoard().textContent = "";
+//   }, 500)
+//   return
 
 
 // DOM Control
@@ -266,40 +296,35 @@ const uiModule = (function() {
 
 })();
 
-
+// Play Round:
 
 uiModule.getSquares().forEach((square, index) => {
     
     square.addEventListener('click', () => {
 
             const currentTurn = gameLoop.getTurn();
-
-            if (square.className === "square played") {
-                uiModule.getResultBoard().textContent = "This cell is already occupied";
-                setTimeout(() => {
-                    uiModule.getResultBoard().textContent = "";
-                }, 500)
-                return
-            }
-            else {
+      
+            if (!gameBoard.isCellOccupied(index)) {
                 currentTurn % 2 === 0 ?
                 square.appendChild(uiModule.getPlayerTwoMarker()): //player two
                 square.appendChild(uiModule.getPlayerOneMarker()); // player one
-
-                square.className = 'square played'
             }
-
+            
             currentTurn % 2 === 0 ? gameController(playerTwo, index):
             gameController(playerOne, index)
 
     })
 
 })
+
+// Restart Game:
  
 uiModule.getRestartButton().addEventListener("click", () => {
     uiModule.resetUI();
     gameLoop.resetGame();
 })
+
+// Rename Player:x
 
 uiModule.getPlayerInput().forEach((input) => {
     input.addEventListener('input', (event) => {
