@@ -314,20 +314,16 @@ uiModule.getSquares().forEach((square, index) => {
             if (uiModule.isInputLocked()) {
                 return;
             }
-            else if (!gameBoard.isCellOccupied(index)) {
+        
 
-                if (currentTurn % 2 === 0) {
-                    square.appendChild(uiModule.getPlayerTwoMarker()); //player two
-                    gameController(playerTwo, index);
-                }
-                 
-                
-                else {
-                    square.appendChild(uiModule.getPlayerOneMarker()); // player one
-                    gameController(playerOne, index);
-                }
+            if (!gameBoard.isCellOccupied(index)) {
+                currentTurn % 2 === 0 ?
+                square.appendChild(uiModule.getPlayerTwoMarker()): //player two
+                square.appendChild(uiModule.getPlayerOneMarker()); // player one
             }
             
+            currentTurn % 2 === 0 ? gameController(playerTwo, index):
+            gameController(playerOne, index)
             
 
     })
