@@ -191,7 +191,7 @@ const gameController = function(player, move) {
 
         
             if (isGameWon) {
-            
+                uiModule.lockInput();
                 uiModule.getResultBoard().textContent = `${playerName} wins!`;
                 
                 player.increaseRecord()
@@ -199,16 +199,18 @@ const gameController = function(player, move) {
                     uiModule.resetUI();          
                     gameLoop.resetGame();     
                     uiModule.getPlayerRecord(player).textContent = `Record: ${player.getRecord()}`
+                    uiModule.unlockInput();
                 }, 1500);
         
                 return
             }
         
             else if (!isGameWon) {
-
+           
                 const isBoardFull = gameBoard.isBoardFull();
         
                 if (isBoardFull) {
+                    uiModule.lockInput();
                     uiModule.getResultBoard().textContent = "Game ended in a tie.";
         
                     setTimeout(() => {
@@ -219,7 +221,8 @@ const gameController = function(player, move) {
                         uiModule.getResultBoard().textContent = "";
                     }, 3000);
         
-                    setTimeout(() => {         
+                    setTimeout(() => {        
+                        uiModule.unlockInput(); 
                         uiModule.resetUI();
                         gameLoop.resetGame();       
                     }, 3000);
@@ -233,11 +236,6 @@ const gameController = function(player, move) {
 };
 
 
-//  uiModule.getResultBoard().textContent = "This cell is already occupied";
-//  setTimeout(() => {
-//    uiModule.getResultBoard().textContent = "";
-//   }, 500)
-//   return
 
 
 // DOM Control
@@ -279,6 +277,15 @@ const uiModule = (function() {
         return playerTwoMarker;
     }
 
+    let inputLock = false;
+
+    const lockInput = () => {return inputLock = true};
+    const unlockInput = () => {return inputLock = false};
+
+    const isInputLocked = () => {
+        return inputLock;
+    }
+
     //  UI board 
 
     const resetUI = function() {
@@ -292,7 +299,7 @@ const uiModule = (function() {
 
 
 
-    return {getResultBoard, getSquares, getPlayerRecord, resetUI, getRestartButton, getPlayerInput, getPlayerOneMarker, getPlayerTwoMarker}
+    return {getResultBoard, getSquares, getPlayerRecord, resetUI, getRestartButton, getPlayerInput, getPlayerOneMarker, getPlayerTwoMarker, isInputLocked, lockInput, unlockInput}
 
 })();
 
@@ -304,14 +311,24 @@ uiModule.getSquares().forEach((square, index) => {
 
             const currentTurn = gameLoop.getTurn();
       
-            if (!gameBoard.isCellOccupied(index)) {
-                currentTurn % 2 === 0 ?
-                square.appendChild(uiModule.getPlayerTwoMarker()): //player two
-                square.appendChild(uiModule.getPlayerOneMarker()); // player one
+            if (uiModule.isInputLocked()) {
+                return;
+            }
+            else if (!gameBoard.isCellOccupied(index)) {
+
+                if (currentTurn % 2 === 0) {
+                    square.appendChild(uiModule.getPlayerTwoMarker()); //player two
+                    gameController(playerTwo, index);
+                }
+                 
+                
+                else {
+                    square.appendChild(uiModule.getPlayerOneMarker()); // player one
+                    gameController(playerOne, index);
+                }
             }
             
-            currentTurn % 2 === 0 ? gameController(playerTwo, index):
-            gameController(playerOne, index)
+            
 
     })
 
