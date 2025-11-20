@@ -249,7 +249,7 @@ const uiModule = (function() {
     const restartButton = document.querySelector("#restart_button");
     const playerOneRecord = document.querySelector('.player_one_record');
     const playerTwoRecord = document.querySelector('.player_two_record');
-    const playerInput = document.querySelectorAll('.player_input');
+    const playerInput = document.querySelectorAll('.player_select');
 
     // Player markers for UI game:
 
@@ -340,14 +340,14 @@ uiModule.getRestartButton().addEventListener("click", () => {
 // Rename Player:x
 
 uiModule.getPlayerInput().forEach((input) => {
-    input.addEventListener('input', (event) => {
+    input.addEventListener('change', (event) => {
 
-        if (input.id === "player_one_name") {
+        if (input.id === "player_one_select") {
             playerOne.setPlayerName(event.target.value);
         }
-        else if (input.id === "player_two_name") {
+        else if (input.id === "player_two_select") {
             playerTwo.setPlayerName(event.target.value);
         }
 
-    });
+    })
 })
