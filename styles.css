@@ -237,15 +237,17 @@ input {
     align-items: center;
     justify-content: flex-end;
 
-    box-shadow: 0px 0px 10px 1px var(--danger-red);
     box-shadow: inset 0px 0px 10px 3px black;
     background-color: #700000;
+    border: 0.2rem solid white;
 
     border-radius: 10%;
 
     gap: 5rem;
 
     height: 39%;
+    max-height: 320px;
+    min-height: 300px;
 }
 
 .player_leader_board>div {
@@ -257,23 +259,39 @@ input {
 }
 
 .player_leader_board>div>h2 {
-    border: 2px solid #700000;    
     width: 70%;
 
     display: flex;
     align-items: center;
-    justify-content: flex-start;
+    justify-content: center;
+    color: white;
 }
 
 
 .player_leader_board select {
-    background-color: transparent;
-    color: var(--soft-gray);
+
+
+    color: white;
     border: none;
     outline: none;
 
     flex: 1;
-    width: 50%;
+    max-width: 170px;
+
+    text-align: center;
+
+    background: transparent;
+
+
+}
+
+.player_leader_board select>option {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+
+    background-color: var(--tough-gray);
+    
 }
 
 .player_leader_board select:active {
@@ -281,6 +299,10 @@ input {
     outline: none;
 }
 
+
+.player_leader_board select:hover {
+    cursor: pointer;
+}
 
 .button_container { 
     display: flex;
