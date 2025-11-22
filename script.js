@@ -147,13 +147,7 @@ const createPlayer = function (name, playerMarker) {
 
     return {setPlayerName, getPlayerName, getPlayerMarker, getRecord, increaseRecord}
 };
-
-// Global Variables
-
-    const playerOne = createPlayer("Player One", "1");
-    const playerTwo = createPlayer("Player Two", "2")
     
-
 // Controller Refactor: It's main purpose is to orchestrate the events of each round while referring to gameLoop's modules
 
 const gameController = function(player, move) {
@@ -250,6 +244,7 @@ const uiModule = (function() {
     const playerOneRecord = document.querySelector('.player_one_record');
     const playerTwoRecord = document.querySelector('.player_two_record');
     const playerInput = document.querySelectorAll('.player_select');
+    const playerPicture = document.querySelectorAll('.profile_pic');
 
     // Player markers for UI game:
 
@@ -257,6 +252,7 @@ const uiModule = (function() {
     const getRestartButton = () => {return restartButton};
     const getPlayerInput = () => {return playerInput}
     const getSquares = () => {return squares};
+    const getPlayerPicture = () => {return playerPicture};
     const getPlayerRecord = (player) => {
         return player.getPlayerMarker() === "2" ? playerTwoRecord: playerOneRecord;
     } 
@@ -297,9 +293,66 @@ const uiModule = (function() {
         uiModule.getResultBoard().textContent = "";
     }
 
+    const reassignPlayerPicture = function(inputID, sticker) {
+
+        
+        playerPicture.forEach((container) => {
+
+            const playerSticker = document.createElement('img');
+          
+
+            switch(sticker) {
+                case sticker = "MadMax":
+                        playerSticker.src = "pics/max_sticker.png";
+                        playerSticker.alt = "max_sticker";
+                        break;
+                case sticker = "Eleven":
+                        playerSticker.src = "pics/eleven_sticker.png"; 
+                        playerSticker.alt = "eleven_sticker";
+                        break;
+                case sticker = "Mike":
+                        playerSticker.src = "pics/mike_sticket.png";
+                        playerSticker.alt = "mike_sticker";
+                        break;
+                case sticker = "Eddie": 
+                        playerSticker.src = "pics/eddie_sticker.png";
+                        playerSticker.alt = "eddie_sticker";
+                        break;
+                case sticker = "Demogorgon":
+                        playerSticker.src = "pics/demogorgon_sticker.png";
+                        playerSticker.alt = "demogorgon_sticker";
+                        break;
+                case sticker = "Vecna":
+                        playerSticker.src = "pics/vecna_sticket.png";
+                        playerSticker.alt = "vecna_sticker";
+                        break;
+                default: 
+                        alert("Sommething went wrong");
+            }
+
+            if (inputID === "player_one_select" && container.id === "player_one_pic") {
+                playerOne.setPlayerName(sticker);
+    
+                
+                container.innerHTML = ""
+                container.appendChild(playerSticker);
+            
+    
+            }
+            else if (inputID === "player_two_select" && container.id === "player_two_pic") {
+                playerTwo.setPlayerName(sticker);
+
+                container.innerHTML = ""
+                container.appendChild(playerSticker);
+            }      
+        })
+
+     
+    }
 
 
-    return {getResultBoard, getSquares, getPlayerRecord, resetUI, getRestartButton, getPlayerInput, getPlayerOneMarker, getPlayerTwoMarker, isInputLocked, lockInput, unlockInput}
+
+    return {getResultBoard, getSquares, getPlayerRecord, resetUI, getRestartButton, getPlayerInput, getPlayerOneMarker, getPlayerTwoMarker, isInputLocked, lockInput, unlockInput, getPlayerPicture, reassignPlayerPicture}
 
 })();
 
@@ -329,7 +382,7 @@ uiModule.getSquares().forEach((square, index) => {
     })
 
 })
-
+0.
 // Restart Game:
  
 uiModule.getRestartButton().addEventListener("click", () => {
@@ -342,12 +395,15 @@ uiModule.getRestartButton().addEventListener("click", () => {
 uiModule.getPlayerInput().forEach((input) => {
     input.addEventListener('change', (event) => {
 
-        if (input.id === "player_one_select") {
-            playerOne.setPlayerName(event.target.value);
-        }
-        else if (input.id === "player_two_select") {
-            playerTwo.setPlayerName(event.target.value);
-        }
+        uiModule.reassignPlayerPicture(input.id, event.target.value);
 
     })
 })
+
+// Global Variables
+
+const playerOne = createPlayer("Eleven", "1");
+uiModule.reassignPlayerPicture("player_one_select", "Eleven");
+const playerTwo = createPlayer("Vecna", "2");
+uiModule.reassignPlayerPicture("player_two_select", "Vecna");
+
