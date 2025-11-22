@@ -1,7 +1,7 @@
 // This function creates a board and sets up two players with their respective marker.
 // It doesn't create the players, just sets that there will always be
-// only two players, "0" will always correspond to player one and so 
-// will "x" to player two
+// only two players, "1" will always correspond to player one and so 
+// will "2" to player two
 
 const gameBoard = (function() {
 
@@ -143,9 +143,10 @@ const createPlayer = function (name, playerMarker) {
     const getPlayerMarker = () => { return marker }
     const getRecord = () => { return record }
     const increaseRecord = () => { record++}
+    const resetRecord = () => {record = 0;}
 
 
-    return {setPlayerName, getPlayerName, getPlayerMarker, getRecord, increaseRecord}
+    return {setPlayerName, getPlayerName, getPlayerMarker, getRecord, increaseRecord, resetRecord}
 };
     
 // Controller Refactor: It's main purpose is to orchestrate the events of each round while referring to gameLoop's modules
@@ -388,6 +389,10 @@ uiModule.getSquares().forEach((square, index) => {
 uiModule.getRestartButton().addEventListener("click", () => {
     uiModule.resetUI();
     gameLoop.resetGame();
+    playerOne.resetRecord();
+    playerTwo.resetRecord();
+    uiModule.getPlayerRecord(playerOne).textContent = `Record: ${playerOne.getRecord()}`
+    uiModule.getPlayerRecord(playerTwo).textContent = `Record: ${playerTwo.getRecord()}`
 })
 
 // Rename Player:x
