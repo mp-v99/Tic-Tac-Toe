@@ -407,3 +407,8 @@ uiModule.reassignPlayerPicture("player_one_select", "Eleven");
 const playerTwo = createPlayer("Vecna", "2");
 uiModule.reassignPlayerPicture("player_two_select", "Vecna");
 
+// Load Marker Images:
+
+uiModule.getPlayerOneMarker();
+uiModule.getPlayerTwoMarker();
+
